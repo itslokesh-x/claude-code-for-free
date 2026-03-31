@@ -2,7 +2,7 @@
 
 # ⚡ Claude Code for Free
 
-**[🌐 Live Site & Documentation](https://itslokeshx.github.io/Claude-Code-For-Free/)**
+**[🌐 Live Site & Documentation](https://itslokesh-x.github.io/Claude-Code-For-Free/)**
 
 **Run Claude Sonnet 4.5 & Opus 4.5 inside Claude Code CLI — completely free via GitHub Copilot.**
 
