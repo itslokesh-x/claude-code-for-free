@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code for Free</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --surface: #121212;
+            --surface2: #1a1a1a;
+            --border: #2a2a2a;
+            --border-hover: #3f3f46;
+            --text: #ffffff;
+            --text-dim: #a1a1aa;
+            --text-muted: #71717a;
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 1rem;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 64px;
+            padding: 0 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo span {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-gh {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            background: var(--surface);
+        }
+
+        .nav-gh:hover {
+            border-color: var(--text-dim);
+            color: var(--text);
+            background: var(--surface2);
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60vw;
+            height: 60vw;
+            max-width: 800px;
+            max-height: 800px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--accent-glow);
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 2.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-tag .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .hero h1 strong {
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--text-muted);
+        }
+
+        .hero-sub {
+            max-width: 600px;
+            color: var(--text-dim);
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        .hero-sub b {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 5rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-family: var(--sans);
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-solid {
+            background: var(--text);
+            color: var(--bg);
+            box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-solid:hover {
+            background: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-ghost {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--text-dim);
+            background: var(--surface2);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-val {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.2rem;
+            display: block;
+        }
+
+        /* LAYOUT */
+        .wrap {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 6rem 5%;
+        }
+
+        .section-tag {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title strong {
+            font-weight: 700;
+        }
+
+        .section-sub {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin-bottom: 3.5rem;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* FLOW */
+        .flow {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+        .flow-item {
+            padding: 2rem 1.5rem;
+            border-right: 1px solid var(--border);
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .flow-item:hover {
+            background: var(--surface2);
+        }
+
+        .flow-item:last-child {
+            border-right: none;
+        }
+
+        .flow-n {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .flow-icon {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .flow-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .flow-desc {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        /* STEPS */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .step {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--surface);
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .step:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .step-h {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .step-n {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            flex-shrink: 0;
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .step-desc {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-top: 0.2rem;
+        }
+
+        .tag {
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .tag-g {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .tag-w {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+        }
+
+        .chev {
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chev.open {
+            transform: rotate(180deg);
+            color: var(--text);
+        }
+
+        .step-body {
+            display: none;
+            padding: 0 2rem 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .step-body.open {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .note {
+            padding: 1rem 1.2rem;
+            background: var(--surface2);
+            border-left: 3px solid var(--border);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            margin: 1.5rem 0;
+            line-height: 1.6;
+        }
+
+        .note b {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .note code {
+            font-family: var(--mono);
+            font-size: 0.9em;
+            color: var(--text);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        /* CODE */
+        .cw {
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .ct {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            background: #0a0a0a;
+        }
+
+        .cl {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .cp {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-dim);
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cp:hover {
+            border-color: var(--text-dim);
+            color: var(--text);
+            background: var(--surface2);
+        }
+
+        @keyframes copyPop {
+            0% {
+                transform: scale(0.9);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .cp.ok {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+            animation: copyPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cw pre {
+            margin: 0;
+            padding: 1.2rem;
+            overflow-x: auto;
+        }
+
+        .cw code {
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e5e5e5;
+            background: none;
+            padding: 0;
+        }
+
+        /* ENV */
+        .env {
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: var(--mono);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .ek {
+            color: #818cf8;
+            font-weight: 500;
+        }
+
+        .ev {
+            color: #a5b4fc;
+        }
+
+        .ec {
+            color: #52525b;
+            font-style: italic;
+        }
+
+        /* SUCCESS & WARNING */
+        .success {
+            padding: 1.2rem 1.5rem;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .success-t {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+        }
+
+        .success-b {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .warn {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: #fbbf24;
+            margin-top: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* MODELS */
+        .models {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+        .mrow {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 0.8fr;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+            gap: 1.5rem;
+            transition: background 0.2s;
+        }
+
+        .mrow:last-child {
+            border-bottom: none;
+        }
+
+        .mrow:hover {
+            background: var(--surface2);
+        }
+
+        .mrow.mh {
+            background: #0a0a0a;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mrow.mh span {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .mn {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            color: var(--text);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .mt {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .ms {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .mc {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem 0.8rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .mstar {
+            color: var(--accent);
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        /* FAQ */
+        .faq {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .fitem {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--surface);
+            transition: all 0.2s;
+        }
+
+        .fitem:hover {
+            border-color: var(--border-hover);
+        }
+
+        .fq {
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-weight: 500;
+            user-select: none;
+            transition: background 0.2s;
+            gap: 1.5rem;
+            color: var(--text);
+        }
+
+        .fq:hover {
+            background: var(--surface2);
+        }
+
+        .fi {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            font-weight: 300;
+        }
+
+        .fi.open {
+            transform: rotate(45deg);
+            color: var(--text);
+        }
+
+        .fa {
+            display: none;
+            padding: 0 1.5rem 1.5rem;
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.7;
+            border-top: 1px solid transparent;
+        }
+
+        .fa.open {
+            display: block;
+            border-color: var(--border);
+            padding-top: 1.2rem;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .fa code {
+            font-family: var(--mono);
+            font-size: 0.9em;
+            color: var(--text);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        /* DIVIDER */
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 2rem 0;
+        }
+
+        /* FOOTER */
+        footer {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 4rem 5%;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .flogo {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .flogo span {
+            color: var(--accent);
+        }
+
+        .ftag {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .flinks {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .flinks a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .flinks a:hover {
+            color: var(--text);
+        }
+
+        .fwarn {
+            width: 100%;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: 1rem;
+        }
+
+        /* REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.in {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 6rem;
+            }
+
+            .flow {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .flow-item:nth-child(2) {
+                border-right: none;
+            }
+
+            .flow-item:nth-child(3) {
+                border-top: 1px solid var(--border);
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .mrow {
+                grid-template-columns: 1.5fr 1fr;
+                gap: 1rem;
+            }
+
+            .mt,
+            .ms {
+                display: none;
+            }
+
+            .wrap {
+                padding: 4rem 5%;
+            }
+
+            .step-h {
+                padding: 1.2rem;
+                gap: 1rem;
+            }
+
+            .step-body {
+                padding: 0 1.2rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .flow {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-item:nth-child(n) {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .flow-item:last-child {
+                border-bottom: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="#" class="nav-logo"><span>⚡</span> Claude Free</a>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#how">How it works</a></li>
+                <li><a href="#setup">Setup</a></li>
+                <li><a href="#models">Models</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <a href="https://github.com/itslokeshx/Claude-Code-For-Free" target="_blank" class="nav-gh">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+                GitHub
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-tag">
+            <span class="dot"></span>
+            Free with GitHub Copilot · No credit card
+        </div>
+        <h1>
+            <strong>Claude Code</strong><br>
+            <em>completely free</em>
+        </h1>
+        <p class="hero-sub">
+            Use <b>Claude Sonnet 4.5</b> and <b>Claude Opus 4.5</b> inside Claude Code CLI — models removed from VS Code
+            Copilot but still fully accessible here. Students get everything free.
+        </p>
+        <div class="hero-actions">
+            <a href="#setup" class="btn btn-solid">Get started →</a>
+            <a href="https://github.com/itslokeshx/free-claude-copilot" target="_blank" class="btn btn-ghost">View on
+                GitHub</a>
+        </div>
+        <div class="hero-stats">
+            <div>
+                <span class="stat-val">$0</span>
+                <span class="stat-label">Cost</span>
+            </div>
+            <div>
+                <span class="stat-val">Sonnet 4.5</span>
+                <span class="stat-label">Available</span>
+            </div>
+            <div>
+                <span class="stat-val">Opus 4.5</span>
+                <span class="stat-label">Available</span>
+            </div>
+            <div>
+                <span class="stat-val">2 min</span>
+                <span class="stat-label">Setup</span>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- HOW -->
+    <div class="wrap reveal" id="how">
+        <div class="section-tag">Architecture</div>
+        <h2 class="section-title"><strong>How</strong> it works</h2>
+        <p class="section-sub">Four components that bridge Claude Code to GitHub Copilot.</p>
+        <div class="flow">
+            <div class="flow-item">
+                <div class="flow-n">01</div>
+                <div class="flow-icon">🎓</div>
+                <div class="flow-name">GitHub Copilot</div>
+                <div class="flow-desc">Free for students via Student Pack.</div>
+            </div>
+            <div class="flow-item">
+                <div class="flow-n">02</div>
+                <div class="flow-icon">⚡</div>
+                <div class="flow-name">OpenCode CLI</div>
+                <div class="flow-desc">Authenticates with GitHub and stores your token.</div>
+            </div>
+            <div class="flow-item">
+                <div class="flow-n">03</div>
+                <div class="flow-icon">🔌</div>
+                <div class="flow-name">claude-code-proxy</div>
+                <div class="flow-desc">Translates Anthropic API to Copilot format.</div>
+            </div>
+            <div class="flow-item">
+                <div class="flow-n">04</div>
+                <div class="flow-icon">🤖</div>
+                <div class="flow-name">Claude Code</div>
+                <div class="flow-desc">Full agentic coding — files, bash, tools.</div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- SETUP -->
+    <div class="wrap reveal" id="setup">
+        <div class="section-tag">Installation</div>
+        <h2 class="section-title"><strong>Setup</strong> guide</h2>
+        <p class="section-sub">Four steps. Takes about 2 minutes.</p>
+
+        <div class="steps">
+
+            <div class="step">
+                <div class="step-h" onclick="tog(this)">
+                    <div class="step-n">01</div>
+                    <div class="step-info">
+                        <div class="step-title">Get GitHub Copilot</div>
+                        <div class="step-desc">Free for students via Student Developer Pack</div>
+                    </div>
+                    <span class="tag tag-g">Free</span>
+                    <span class="chev open">▾</span>
+                </div>
+                <div class="step-body open">
+                    <div class="note">
+                        <b>Students:</b> Visit <code>education.github.com/pack</code> and verify with your .edu email or
+                        student ID. Approval takes 1–3 days. GitHub Copilot is then completely free.
+                    </div>
+                    <div class="cw">
+                        <div class="ct">
+                            <span class="cl">link</span>
+                            <button class="cp" onclick="cp(this,'https://education.github.com/pack')">Copy</button>
+                        </div>
+                        <pre><code>https://education.github.com/pack</code></pre>
+                    </div>
+                    <div class="note" style="border-left-color:var(--muted2);">
+                        Not a student? GitHub Copilot is <b>$10/month</b> at github.com/features/copilot
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-h" onclick="tog(this)">
+                    <div class="step-n">02</div>
+                    <div class="step-info">
+                        <div class="step-title">Install & authenticate OpenCode</div>
+                        <div class="step-desc">CLI that connects to GitHub Copilot models</div>
+                    </div>
+                    <span class="tag tag-w">Required</span>
+                    <span class="chev open">▾</span>
+                </div>
+                <div class="step-body open">
+                    <div class="cw">
+                        <div class="ct">
+                            <span class="cl">bash · install</span>
+                            <button class="cp"
+                                onclick="cp(this,'curl -fsSL https://opencode.ai/install | bash && source ~/.bashrc')">Copy</button>
+                        </div>
+                        <pre><code>curl -fsSL https://opencode.ai/install | bash && source ~/.bashrc</code></pre>
+                    </div>
+                    <div class="cw">
+                        <div class="ct">
+                            <span class="cl">bash · verify</span>
+                            <button class="cp" onclick="cp(this,'opencode --version')">Copy</button>
+                        </div>
+                        <pre><code>opencode --version</code></pre>
+                    </div>
+                    <div class="cw">
+                        <div class="ct">
+                            <span class="cl">bash · login</span>
+                            <button class="cp" onclick="cp(this,'opencode auth login github')">Copy</button>
+                        </div>
+                        <pre><code>opencode auth login github</code></pre>
+                    </div>
+                    <div class="note">A device code will appear — go to <code>github.com/login/device</code>, enter it,
+                        and authorize OpenCode.</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-h" onclick="tog(this)">
+                    <div class="step-n">03</div>
+                    <div class="step-info">
+                        <div class="step-title">Setup claude-code-proxy</div>
+                        <div class="step-desc">Bridges Claude Code to GitHub Copilot's API</div>
+                    </div>
+                    <span class="tag tag-w">Core</span>
+                    <span class="chev open">▾</span>
+                </div>
+                <div class="step-body open">
+                    <div class="cw">
+                        <div class="ct">
+                            <span class="cl">bash · clone</span>
+                            <button class="cp"
+                                onclick="cp(this,'git clone https://github.com/fuergaosi233/claude-code-proxy\\ncd claude-code-proxy\\npip install -r requirements.txt')">Copy</button>
+                        </div>
+                        <pre><code>git clone https://github.com/fuergaosi233/claude-code-proxy
+cd claude-code-proxy
+pip install -r requirements.txt</code></pre>
+                    </div>
+                    <div class="cw">
+                        <div class="ct">
+                            <span class="cl">bash · get token</span>
+                            <button class="cp" onclick="cp(this,'cat ~/.local/share/opencode/auth.json')">Copy</button>
+                        </div>
+                        <pre><code>cat ~/.local/share/opencode/auth.json</code></pre>
+                    </div>
+                    <div class="note">Copy the <b>access</b> value — that's your token. Paste it as
+                        <code>OPENAI_API_KEY</code> below.
+                    </div>
+                    <div class="env">
+                        <div><span class="ec"># .env — create this inside the claude-code-proxy folder</span></div>
+                        <div><span class="ek">OPENAI_API_KEY</span>=<span class="ev">your_token_here</span></div>
+                        <div><span class="ek">OPENAI_BASE_URL</span>=<span
+                                class="ev">https://api.githubcopilot.com</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="ec"># Models removed from VS Code but work here</span></div>
+                        <div><span class="ek">BIG_MODEL</span>=<span class="ev">claude-sonnet-4.5</span></div>
+                        <div><span class="ek">MIDDLE_MODEL</span>=<span class="ev">claude-sonnet-4.5</span></div>
+                        <div><span class="ek">SMALL_MODEL</span>=<span class="ev">claude-haiku-4.5</span></div>
+                        <div>&nbsp;</div>
+                        <div><span class="ek">MAX_TOKENS_LIMIT</span>=<span class="ev">8096</span></div>
+                        <div><span class="ek">REQUEST_TIMEOUT</span>=<span class="ev">300</span></div>
+                        <div><span class="ek">PORT</span>=<span class="ev">8082</span></div>
+                    </div>
+                    <div class="warn">
+                        <span>⚠</span>
+                        <span>Never commit your token to git. Add <code style="font-family:var(--mono)">.env</code> to
+                            your <code style="font-family:var(--mono)">.gitignore</code>.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-h" onclick="tog(this)">
+                    <div class="step-n">04</div>
+                    <div class="step-info">
+                        <div class="step-title">Launch Claude Code</div>
+                        <div class="step-desc">Point Claude Code to your local proxy</div>
+                    </div>
+                    <span class="tag tag-g">Final step</span>
+                    <span class="chev open">▾</span>
+                </div>
+                <div class="step-body open">
+                    <div class="cw">
+                        <div class="ct">
+                            <span class="cl">bash · install claude code</span>
+                            <button class="cp"
+                                onclick="cp(this,'npm install -g @anthropic-ai/claude-code')">Copy</button>
+                        </div>
+                        <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+                    </div>
+                    <p style="font-size:0.78rem;color:var(--muted);margin:0.9rem 0 0.3rem;"><b
+                            style="color:var(--text);font-weight:500;">Terminal 1</b> — keep this running:</p>
+                    <div class="cw">
+                        <div class="ct">
+                            <span class="cl">bash · start proxy</span>
+                            <button class="cp"
+                                onclick="cp(this,'cd claude-code-proxy && python3 start_proxy.py')">Copy</button>
+                        </div>
+                        <pre><code>cd claude-code-proxy && python3 start_proxy.py</code></pre>
+                    </div>
+                    <p style="font-size:0.78rem;color:var(--muted);margin:0.9rem 0 0.3rem;"><b
+                            style="color:var(--text);font-weight:500;">Terminal 2</b> — launch Claude Code:</p>
+                    <div class="cw">
+                        <div class="ct">
+                            <span class="cl">bash · launch</span>
+                            <button class="cp"
+                                onclick="cp(this,'export ANTHROPIC_BASE_URL=\&quot;http://localhost:8082\&quot;\\nexport ANTHROPIC_AUTH_TOKEN=\&quot;anything\&quot;\\nclaude --model claude-sonnet-4-5')">Copy</button>
+                        </div>
+                        <pre><code>export ANTHROPIC_BASE_URL="http://localhost:8082"
+export ANTHROPIC_AUTH_TOKEN="anything"
+claude --model claude-sonnet-4-5</code></pre>
+                    </div>
+                    <div class="success">
+                        <div class="success-t">🎉 You're in</div>
+                        <div class="success-b">Claude Code is running Claude Sonnet 4.5 free via GitHub Copilot. The
+                            model removed from VS Code Copilot — back and working.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- MODELS -->
+    <div class="wrap reveal" id="models">
+        <div class="section-tag">Models</div>
+        <h2 class="section-title"><strong>best</strong> models</h2>
+        <p class="section-sub">Change <code style="font-family:var(--mono);font-size:0.85rem;">BIG_MODEL</code> in .env
+            to switch. ★ = removed from VS Code.</p>
+
+        <div class="models">
+            <div class="mrow mh">
+                <span>Model</span>
+                <span>Type</span>
+                <span>Speed</span>
+                <span>Cost</span>
+            </div>
+            <div class="mrow">
+                <div class="mn">claude-sonnet-4.5 <span class="mstar">★</span></div>
+                <div class="mt">Coding</div>
+                <div class="ms">⚡⚡⚡</div>
+                <div><span class="mc">Free</span></div>
+            </div>
+            <div class="mrow">
+                <div class="mn">claude-opus-4.5 <span class="mstar">★</span></div>
+                <div class="mt">Reasoning</div>
+                <div class="ms">⚡⚡</div>
+                <div><span class="mc">Free</span></div>
+            </div>
+            <div class="mrow">
+                <div class="mn">claude-haiku-4.5</div>
+                <div class="mt">Fast</div>
+                <div class="ms">⚡⚡⚡⚡⚡</div>
+                <div><span class="mc">Free</span></div>
+            </div>
+            <div class="mrow">
+                <div class="mn">codex-5.3</div>
+                <div class="mt">General</div>
+                <div class="ms">⚡⚡⚡⚡</div>
+                <div><span class="mc">Free</span></div>
+            </div>
+            <div class="mrow">
+                <div class="mn">gemini-3.1-pro</div>
+                <div class="mt">General</div>
+                <div class="ms">⚡⚡⚡</div>
+                <div><span class="mc">Free</span></div>
+            </div>
+
+            <div class="note" style="margin-top:1rem;">
+                <b>★ Removed from VS Code Copilot</b> — Sonnet 4.5 and Opus 4.5 were pulled from the VS Code extension
+                but
+                remain fully accessible through the Copilot API used by this setup.
+            </div>
+
+            <div class="success">
+                <div class="success-t">🌐 Complete GitHub Copilot Access</div>
+                <div class="success-b">Yes, you can use <b>ALL</b> models available in GitHub Copilot! Just change the
+                    <code>BIG_MODEL</code> in your <code>.env</code> file to <code>codex-5.3</code>,
+                    <code>o1-preview</code>, <code>gemini-3.1-pro</code>, <code>llama-3.3-70b</code>, or any other
+                    model. Run <code>opencode models</code> in your terminal to easily see the full list of 100+
+                    available models.
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- FAQ -->
+        <div class="wrap reveal" id="faq">
+            <div class="section-tag">FAQ</div>
+            <h2 class="section-title"><strong>Common</strong> questions</h2>
+            <p class="section-sub">Quick answers.</p>
+
+            <div class="faq">
+                <div class="fitem">
+                    <div class="fq" onclick="faq(this)">Is this actually free?<span class="fi">+</span></div>
+                    <div class="fa">Yes. GitHub Copilot is free for students via the Student Developer Pack. For
+                        everyone
+                        else it's $10/month. No additional costs — claude-code-proxy and OpenCode are both open source.
+                    </div>
+                </div>
+                <div class="fitem">
+                    <div class="fq" onclick="faq(this)">Why were Claude models removed from VS Code?<span
+                            class="fi">+</span></div>
+                    <div class="fa">GitHub removed Claude Sonnet 4.5 and Opus 4.5 from the VS Code Copilot extension UI.
+                        However they're still accessible via the Copilot API — which is exactly what claude-code-proxy
+                        uses.
+                    </div>
+                </div>
+                <div class="fitem">
+                    <div class="fq" onclick="faq(this)">Does it work on Windows / Mac / Linux?<span class="fi">+</span>
+                    </div>
+                    <div class="fa">Linux and Mac work natively. Windows users should use WSL. All commands in this
+                        guide
+                        are for bash/zsh.</div>
+                </div>
+                <div class="fitem">
+                    <div class="fq" onclick="faq(this)">My token expired — how do I refresh?<span class="fi">+</span>
+                    </div>
+                    <div class="fa">Run <code>opencode auth login github</code> again, authorize in browser, then update
+                        <code>OPENAI_API_KEY</code> in your <code>.env</code> with the new token from
+                        <code>~/.local/share/opencode/auth.json</code>.
+                    </div>
+                </div>
+                <div class="fitem">
+                    <div class="fq" onclick="faq(this)">How do I switch to Opus 4.5?<span class="fi">+</span></div>
+                    <div class="fa">Edit <code>.env</code> and set <code>BIG_MODEL=claude-opus-4.5</code> and
+                        <code>MIDDLE_MODEL=claude-opus-4.5</code>. Restart the proxy. Opus is slower but significantly
+                        more
+                        capable for complex reasoning.
+                    </div>
+                </div>
+                <div class="fitem">
+                    <div class="fq" onclick="faq(this)">Why is it slow sometimes?<span class="fi">+</span></div>
+                    <div class="fa">Sonnet 4.5 and Opus 4.5 are large models — they take 20–30s for complex responses.
+                        For
+                        speed switch to <code>claude-haiku-4.5</code> (~5s) or <code>gpt-4.1</code> (~3–5s) in your
+                        <code>.env</code>.
+                    </div>
+                </div>
+                <div class="fitem">
+                    <div class="fq" onclick="faq(this)">Can I use this for large codebases?<span class="fi">+</span>
+                    </div>
+                    <div class="fa"><code>MAX_TOKENS_LIMIT=200000</code> removes practical limits. Claude Code's agentic
+                        mode handles large codebases — reading files, writing code, running tests — just like a paid
+                        Anthropic API key.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <div>
+                <div class="flogo"><span>⚡</span> Claude Free</div>
+                <div class="ftag">Free with GitHub Copilot · Made for developers</div>
+            </div>
+            <div class="flinks">
+                <a href="https://github.com/itslokeshx/free-claude-copilot" target="_blank">GitHub</a>
+                <a href="https://opencode.ai" target="_blank">OpenCode</a>
+                <a href="https://github.com/fuergaosi233/claude-code-proxy" target="_blank">claude-code-proxy</a>
+                <a href="https://anthropic.com" target="_blank">Anthropic</a>
+                <a href="https://education.github.com/pack" target="_blank">Student Pack</a>
+            </div>
+            <div class="fwarn">⚠ Keep your GitHub token private — never commit it to git. Revoke at github.com →
+                Settings →
+                Developer settings if exposed.</div>
+        </footer>
+
+        <script>
+            const copyIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+            const checkIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+            document.querySelectorAll('.cp').forEach(btn => {
+                btn.innerHTML = copyIcon + ' Copy';
+            });
+
+            function cp(btn, text) {
+                if (btn.classList.contains('ok')) return;
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.innerHTML = checkIcon + ' Copied';
+                    btn.classList.add('ok');
+                    setTimeout(() => { btn.innerHTML = copyIcon + ' Copy'; btn.classList.remove('ok'); }, 2000);
+                });
+            }
+            function tog(h) {
+                const b = h.nextElementSibling;
+                const c = h.querySelector('.chev');
+                b.classList.toggle('open');
+                c.classList.toggle('open');
+            }
+            function faq(q) {
+                const a = q.nextElementSibling;
+                const i = q.querySelector('.fi');
+                a.classList.toggle('open');
+                i.classList.toggle('open');
+            }
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+            }, { threshold: 0.08 });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        </script>
+</body>
